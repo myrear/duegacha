@@ -29,5 +29,6 @@ export default (props: Props) => {
 }
 
 const StyledTypography = styled(Typography)`
-    padding: 0px 10px;
+    width: 60px;
+    text-align: center;
 `

@@ -11,7 +11,7 @@ interface Props {
     appearances: Appearance[]
     appearance?: Appearance
     onPlayReeling: () => void
-    kind: GachaKind
+    kind?: GachaKind
     onChangeGachaKind: (e: React.ChangeEvent<{}>, newValue: GachaKind) => void
 }
 
@@ -19,17 +19,17 @@ export default (props: Props) => {
     const { animation, appearance, appearances, onPlayReeling: onClick, kind, onChangeGachaKind } = props
 
     return (
-        <Grid container spacing={3} alignItems={'stretch'} justify={'center'}>
+        <Grid container spacing={2} alignItems={'stretch'} justify={'center'}>
             <Grid item xs={12}>
-                <PaddingPaper>
+                <Paper>
                     <Tabs value={kind} onChange={onChangeGachaKind} indicatorColor='primary' centered variant='fullWidth'>
                         <Tab value={GachaKind.Dogiragon} label='ドギラゴン・ガチャ' />
                         <Tab value={GachaKind.Dokindam} label='ドキンダム・ガチャ' />
                     </Tabs>
-                </PaddingPaper>
+                </Paper>
             </Grid>
             <Grid item xs={12} sm={'auto'}>
-                <PaddingPaper>
+                <Paper>
                     <ReelBox>
                         <ViewBox>
                             <Items animation={animation}>
@@ -50,7 +50,7 @@ export default (props: Props) => {
                             <Replay fontSize='large' />
                         </IconButton>
                     </ReelBox>
-                </PaddingPaper>
+                </Paper>
             </Grid>
             <Grid item xs={12} sm>
                 <VerticalFilledPaper>
@@ -65,7 +65,8 @@ export default (props: Props) => {
 
 const ViewBox = styled.div`
     box-sizing: border-box;
-    width: 200px;
+    min-width: 250px;
+    width: 100%;
     height: ${A_REEL_HEIGHT * 3}px;
     mask-image: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 33.3%, rgba(0, 0, 0, 1) 66.6%, rgba(0, 0, 0, 0) 100%);
     overflow: hidden;
@@ -74,10 +75,6 @@ const ViewBox = styled.div`
 const VerticalFilledPaper = styled(Paper)`
     height: 100%;
     min-height: 150px;
-`
-
-const PaddingPaper = styled(Paper)`
-    padding: 16px;
 `
 
 const DetailWrapper = styled.div`
