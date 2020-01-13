@@ -25,10 +25,13 @@ export default () => {
                 return;
             }
         }
-        localStorage.setItem(STARTUP_GACHA_KIND_KEY, StartupGachaKind.LastUsed.toString())
     }, [])
 
     const [startupGacha, setStartupGacha] = useState(StartupGachaKind.LastUsed)
+
+    useEffect(() => {
+        localStorage.setItem(STARTUP_GACHA_KIND_KEY, startupGacha.toString())
+    }, [startupGacha])
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setStartupGacha(event.target.value as StartupGachaKind)

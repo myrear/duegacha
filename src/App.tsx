@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Appearance, DogiragonGachaAppearances, GachaKind, DokindamGachaAppearances } from './Gacha';
-import { REELING_DURATION, A_REEL_HEIGHT, LAST_USED_GACHA_KIND_KEY } from "./constants";
+import { REELING_DURATION, A_REEL_HEIGHT, LAST_USED_GACHA_KIND_KEY, STARTUP_GACHA_KIND_KEY } from "./constants";
 import './array.extension'
 import './number.exntension'
 import Main from './Main'
@@ -21,6 +21,7 @@ const App = () => {
 
   useEffect(() => {
     const savedKind = localStorage.getItem(LAST_USED_GACHA_KIND_KEY)
+    const savedStartupGacha = localStorage.getItem(STARTUP_GACHA_KIND_KEY)
     if (savedKind === GachaKind.Dokindam.toString()) {
       setKind(GachaKind.Dokindam)
       setAppearances(DokindamGachaAppearances.concat([]))
