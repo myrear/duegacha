@@ -10,6 +10,7 @@ import { AppBar, Toolbar, Grid, IconButton, Typography } from '@material-ui/core
 import Preferences from './Preferences';
 import { Menu } from "@material-ui/icons";
 import SideMenu from './SideMenu'
+import { StartupGachaKind } from './preference';
 
 const App = () => {
   const [isAnimating, setIsAnimating] = useState(false)
@@ -19,15 +20,30 @@ const App = () => {
   const [kind, setKind] = useState<GachaKind | undefined>(undefined)
   const [isMenuOpened, setIsMenuOpened] = useState(false)
 
+  // 起動時のガチャ設定
   useEffect(() => {
     const savedKind = localStorage.getItem(LAST_USED_GACHA_KIND_KEY)
     const savedStartupGacha = localStorage.getItem(STARTUP_GACHA_KIND_KEY)
-    if (savedKind === GachaKind.Dokindam.toString()) {
+
+    if (savedStartupGacha === StartupGachaKind.Dokindam.toString()) { // ドキンダムガチャの場合
       setKind(GachaKind.Dokindam)
-      setAppearances(DokindamGachaAppearances.concat([]))
-    } else setKind(GachaKind.Dogiragon)
+    } else if (savedStartupGacha === StartupGachaKind.Dogiragon.toString()) { // ドギラゴンガチャの場合
+      setKind(GachaKind.Dogiragon)
+    } else { // それ以外の場合、最後に使用したガチャの場合
+      if (savedKind === GachaKind.Dokindam.toString()) { // ドキンダムガチャを最後に使用していた場合
+        setKind(GachaKind.Dokindam)
+      } else setKind(GachaKind.Dogiragon) // それ以外の場合（デフォルト）
+    }
   }, [])
 
+  // ガチャの種類が変更された時、種類に応じたガチャの出目に変更
+  useEffect(() => {
+    if (kind === GachaKind.Dokindam) {
+      setAppearances(DokindamGachaAppearances.concat([]))
+    } else setAppearances(DogiragonGachaAppearances.concat([]))
+  }, [kind])
+
+  // ガチャを回す時
   const onPlayReeling = (): void => {
     if (isAnimating) return;
 
