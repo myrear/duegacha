@@ -6,9 +6,11 @@ import { Replay } from '@material-ui/icons'
 import Detail from './Detail'
 import { A_REEL_HEIGHT, REELING_DURATION, LAST_USED_GACHA_KIND_KEY, STARTUP_GACHA_KIND_KEY } from "./constants";
 import { StartupGachaKind } from "./preference";
+import './array.extension'
+import './number.exntension'
 
 export default () => {
-    const [isAnimating, setIsAnimating] = useState(false)
+    const [isReeling, setIsReeling] = useState(false)
     const [animation, setAnimation] = useState(Reeling1)
     const [appearance, setAppearance] = useState<Appearance | undefined>(undefined)
     const [appearances, setAppearances] = useState(DogiragonGachaAppearances.concat([]).orderFromIndex(DogiragonGachaAppearances.length.randomInteger()))
@@ -34,6 +36,7 @@ export default () => {
     useEffect(() => {
         if (kind === undefined) return;
 
+        // 最後に使用したガチャとして保存
         localStorage.setItem(LAST_USED_GACHA_KIND_KEY, kind.toString())
 
         if (kind === GachaKind.Dokindam) {
@@ -45,9 +48,9 @@ export default () => {
 
     // ガチャを回す時
     const onPlayReeling = (): void => {
-        if (isAnimating) return;
+        if (isReeling) return;
 
-        setIsAnimating(true)
+        setIsReeling(true)
 
         const index = appearances.length.randomInteger()
         const newAppearances = appearances.orderFromIndex(index)
@@ -55,7 +58,7 @@ export default () => {
         const newAppearance = newAppearances[appearances.length - 3]
 
         window.setTimeout(() => {
-            setIsAnimating(false)
+            setIsReeling(false)
             setAppearance(newAppearance)
         }, REELING_DURATION)
 
@@ -67,7 +70,7 @@ export default () => {
     }
 
     const onChangeGachaKind = (e: React.ChangeEvent<{}>, k: GachaKind) => {
-        if (isAnimating) return;
+        if (isReeling) return;
         setKind(k)
     }
 
