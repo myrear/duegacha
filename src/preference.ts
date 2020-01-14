@@ -14,3 +14,11 @@ export const isStartupGachaKind = (item: any): item is StartupGachaKind => {
         item === StartupGachaKind.Dokindam
     )
 }
+
+/**
+ * ガチャを切り替えるときの挙動を表します。
+ */
+export enum ChangingGachaBehavior {
+    DoNotChange,
+    StopReelingAndForceChanging
+}
