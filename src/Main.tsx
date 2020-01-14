@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled, { Keyframes, keyframes } from 'styled-components'
 import { Appearance, GachaKind, DogiragonGachaAppearances, DokindamGachaAppearances } from './Gacha'
-import { Paper, IconButton, Grid, Typography, Tab, Tabs } from '@material-ui/core'
+import { Paper, IconButton, Grid, Typography, Tab, Tabs, Avatar, Hidden } from '@material-ui/core'
 import { Replay } from '@material-ui/icons'
 import Detail from './Detail'
 import { A_REEL_HEIGHT, REELING_DURATION, LAST_USED_GACHA_KIND_KEY, STARTUP_GACHA_KIND_KEY } from "./constants";
-import { StartupGachaKind } from "./preference";
+import { StartupGachaKind, ChangingGachaBehaviorContext, ChangingGachaBehavior } from "./preference";
 import './array.extension'
 import './number.exntension'
 
@@ -15,6 +15,7 @@ export default () => {
     const [appearance, setAppearance] = useState<Appearance | undefined>(undefined)
     const [appearances, setAppearances] = useState(DogiragonGachaAppearances.concat([]).orderFromIndex(DogiragonGachaAppearances.length.randomInteger()))
     const [kind, setKind] = useState<GachaKind | undefined>(undefined)
+    const [ changingGachaBehavior ] = useContext(ChangingGachaBehaviorContext)
 
     // 起動時のガチャ設定
     useEffect(() => {
@@ -69,8 +70,9 @@ export default () => {
         }
     }
 
+    // ガチャの種類を切り替える直前
     const onChangeGachaKind = (e: React.ChangeEvent<{}>, k: GachaKind) => {
-        if (isReeling) return;
+        if (isReeling && changingGachaBehavior === ChangingGachaBehavior.DoNotChange) return;
         setKind(k)
     }
 
@@ -78,9 +80,27 @@ export default () => {
         <Grid container spacing={2} alignItems={'stretch'} justify={'center'}>
             <Grid item xs={12}>
                 <Paper>
-                    <Tabs value={kind} onChange={onChangeGachaKind} indicatorColor='primary' centered variant='fullWidth'>
-                        <Tab value={GachaKind.Dogiragon} label='ドギラゴン・ガチャ' />
-                        <Tab value={GachaKind.Dokindam} label='ドキンダム・ガチャ' />
+                    <Tabs value={kind === undefined ? false : kind} onChange={onChangeGachaKind} indicatorColor='primary' centered variant='fullWidth'>
+                        <Tab value={GachaKind.Dogiragon} label={
+                            <div>
+                                <Hidden smUp>
+                                    <Avatar src='/static/DogiragonGachaIcon.png' />
+                                </Hidden>
+                                <Hidden xsDown>
+                                    <Typography variant='body1'>{'ドギラゴン・ガチャ'}</Typography>
+                                </Hidden>
+                            </div>
+                        } />
+                        <Tab value={GachaKind.Dokindam} label={
+                            <div>
+                                <Hidden smUp>
+                                    <Avatar src='/static/DokindamGachaIcon.png' />
+                                </Hidden>
+                                <Hidden xsDown>
+                                    <Typography variant='body1'>{'ドキンダム・ガチャ'}</Typography>
+                                </Hidden>
+                            </div>
+                        } />
                     </Tabs>
                 </Paper>
             </Grid>

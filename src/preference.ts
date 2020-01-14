@@ -1,3 +1,5 @@
+import { createContext } from 'react'
+
 /**
  * アプリケーション開始時のガチャの種類を表します。
  */
@@ -22,3 +24,5 @@ export enum ChangingGachaBehavior {
     DoNotChange,
     StopReelingAndForceChanging
 }
+
+export const ChangingGachaBehaviorContext = createContext<[ChangingGachaBehavior, (v: ChangingGachaBehavior) => void]>([ChangingGachaBehavior.DoNotChange, _ => { }])

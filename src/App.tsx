@@ -6,9 +6,11 @@ import { AppBar, Toolbar, Grid, IconButton, Typography } from '@material-ui/core
 import Preferences from './Preferences';
 import { Menu } from "@material-ui/icons";
 import SideMenu from './SideMenu'
+import { ChangingGachaBehaviorContext, ChangingGachaBehavior } from "./preference";
 
 const App = () => {
   const [isMenuOpened, setIsMenuOpened] = useState(false)
+  const [changingGachaBehavior, setChangingGachaBehavior] = useState(ChangingGachaBehavior.DoNotChange)
 
   return (
     <Root>
@@ -31,12 +33,16 @@ const App = () => {
         <Grid item xs={12}>
           <Switch>
             <Route exact path='/'>
-              <MainWrapper>
-                <Main />
-              </MainWrapper>
+              <ChangingGachaBehaviorContext.Provider value={[changingGachaBehavior, setChangingGachaBehavior]}>
+                <MainWrapper>
+                  <Main />
+                </MainWrapper>
+              </ChangingGachaBehaviorContext.Provider>
             </Route>
             <Route path='/preferences'>
-              <Preferences />
+              <ChangingGachaBehaviorContext.Provider value={[changingGachaBehavior, setChangingGachaBehavior]}>
+                <Preferences />
+              </ChangingGachaBehaviorContext.Provider>
             </Route>
           </Switch>
         </Grid>

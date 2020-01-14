@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { Grid, Card, Select, MenuItem, InputLabel, FormControl } from '@material-ui/core'
-import { StartupGachaKind, isStartupGachaKind, ChangingGachaBehavior } from './preference'
+import { StartupGachaKind, isStartupGachaKind, ChangingGachaBehavior, ChangingGachaBehaviorContext } from './preference'
 import { STARTUP_GACHA_KIND_KEY, CHANGING_GACHA_BEHAVIOR_KEY } from './constants'
 
 const getGachaKindDescription = (v: StartupGachaKind) => {
@@ -26,7 +26,7 @@ const getChangingGachaBehaviorDescription = (v: ChangingGachaBehavior) => {
 
 export default () => {
     const [startupGacha, setStartupGacha] = useState(StartupGachaKind.LastUsed)
-    const [changingGachaBehavior, setChangingGachaBehavior] = useState(ChangingGachaBehavior.DoNotChange)
+    const [changingGachaBehavior, setChangingGachaBehavior] = useContext(ChangingGachaBehaviorContext)
 
     useEffect(() => {
         const savedStartupGacha = localStorage.getItem(STARTUP_GACHA_KIND_KEY)
@@ -36,6 +36,17 @@ export default () => {
                 setStartupGacha(parsed)
             }
         }
+
+        const savedChangingGachaBehavior = localStorage.getItem(CHANGING_GACHA_BEHAVIOR_KEY)
+        if (savedChangingGachaBehavior !== null) {
+            const parsed = parseInt(savedChangingGachaBehavior)
+            if (parsed === ChangingGachaBehavior.DoNotChange || parsed === ChangingGachaBehavior.StopReelingAndForceChanging) {
+                setChangingGachaBehavior(parsed)
+            }
+        }
+
+        // 初回のみの処理のため
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -46,7 +57,7 @@ export default () => {
         localStorage.setItem(CHANGING_GACHA_BEHAVIOR_KEY, changingGachaBehavior.toString())
     }, [changingGachaBehavior])
 
-    const handleChange = function <T>(setState: React.Dispatch<React.SetStateAction<T>>) {
+    const handleChange = function <T>(setState: (v: T) => void) {
         return (e: React.ChangeEvent<{ value: unknown }>) => {
             setState(e.target.value as T)
         }
@@ -60,7 +71,7 @@ export default () => {
                         <InnerCard>
                             <FormControl fullWidth>
                                 <InputLabel>起動時のガチャ</InputLabel>
-                                <Select value={startupGacha} onChange={handleChange<StartupGachaKind>(setStartupGacha)}>
+                                <Select value={startupGacha} onChange={handleChange(setStartupGacha)}>
                                     {[StartupGachaKind.LastUsed, StartupGachaKind.Dogiragon, StartupGachaKind.Dokindam].map((v, i) => {
                                         return (
                                             <MenuItem value={v} key={i}>{getGachaKindDescription(v)}</MenuItem>
@@ -76,7 +87,7 @@ export default () => {
                         <InnerCard>
                             <FormControl fullWidth>
                                 <InputLabel>ガチャ中の、ガチャ切替の挙動</InputLabel>
-                                <Select value={changingGachaBehavior} onChange={handleChange<ChangingGachaBehavior>(setChangingGachaBehavior)}>
+                                <Select value={changingGachaBehavior} onChange={handleChange(setChangingGachaBehavior)}>
                                     {[ChangingGachaBehavior.DoNotChange, ChangingGachaBehavior.StopReelingAndForceChanging].map((v, i) => {
                                         return (
                                             <MenuItem value={v} key={i}>{getChangingGachaBehaviorDescription(v)}</MenuItem>
