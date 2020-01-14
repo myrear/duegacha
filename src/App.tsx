@@ -38,9 +38,15 @@ const App = () => {
 
   // ガチャの種類が変更された時、種類に応じたガチャの出目に変更
   useEffect(() => {
+    if (kind === undefined) return;
+    
+    localStorage.setItem(LAST_USED_GACHA_KIND_KEY, kind.toString())
+
     if (kind === GachaKind.Dokindam) {
-      setAppearances(DokindamGachaAppearances.concat([]))
-    } else setAppearances(DogiragonGachaAppearances.concat([]))
+      setAppearances(DokindamGachaAppearances.concat([]).orderFromIndex(DokindamGachaAppearances.length.randomInteger()))
+    } else setAppearances(DogiragonGachaAppearances.concat([]).orderFromIndex(DogiragonGachaAppearances.length.randomInteger()))
+    
+    setAppearance(undefined)
   }, [kind])
 
   // ガチャを回す時
@@ -68,18 +74,7 @@ const App = () => {
 
   const onChangeGachaKind = (e: React.ChangeEvent<{}>, k: GachaKind) => {
     if (isAnimating) return;
-    
     setKind(k)
-    localStorage.setItem(LAST_USED_GACHA_KIND_KEY, k.toString())
-
-    switch (k) {
-      case GachaKind.Dokindam:
-        setAppearances(DokindamGachaAppearances.concat([]).orderFromIndex(DokindamGachaAppearances.length))
-        break
-      default:
-        setAppearances(DogiragonGachaAppearances.concat([]).orderFromIndex(DogiragonGachaAppearances.length))
-    }
-    setAppearance(undefined)
   }
 
   return (
