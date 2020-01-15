@@ -22,3 +22,8 @@ export const STARTUP_GACHA_KIND_KEY = 'STARTUP_GACHA_KIND'
  * localStorageに保存された、ガチャ切替時の挙動のキー
  */
 export const CHANGING_GACHA_BEHAVIOR_KEY = 'CHANGING_GACHA_BEHAVIOR'
+
+/**
+ * ガチャ切り替えタブの中身を改行するブレークポイント
+ */
+export const GACHA_TAB_CONTENT_BREAKPOINT: number = 410

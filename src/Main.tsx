@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled, { Keyframes, keyframes } from 'styled-components'
 import { Appearance, GachaKind, DogiragonGachaAppearances, DokindamGachaAppearances } from './Gacha'
-import { Paper, IconButton, Grid, Typography, Tab, Tabs, Avatar, Hidden } from '@material-ui/core'
+import { Paper, IconButton, Grid, Typography, Tab, Tabs } from '@material-ui/core'
 import { Replay } from '@material-ui/icons'
 import Detail from './Detail'
-import { A_REEL_HEIGHT, REELING_DURATION, LAST_USED_GACHA_KIND_KEY, STARTUP_GACHA_KIND_KEY } from "./constants";
+import { A_REEL_HEIGHT, REELING_DURATION, LAST_USED_GACHA_KIND_KEY, STARTUP_GACHA_KIND_KEY, GACHA_TAB_CONTENT_BREAKPOINT } from "./constants";
 import { StartupGachaKind, ChangingGachaBehaviorContext, ChangingGachaBehavior } from "./preference";
 import './array.extension'
 import './number.exntension'
@@ -83,22 +83,16 @@ export default () => {
                     <Tabs value={kind === undefined ? false : kind} onChange={onChangeGachaKind} indicatorColor='primary' centered variant='fullWidth'>
                         <Tab value={GachaKind.Dogiragon} label={
                             <div>
-                                <Hidden smUp>
-                                    <Avatar src='/static/DogiragonGachaIcon.png' />
-                                </Hidden>
-                                <Hidden xsDown>
-                                    <Typography variant='body1'>{'ドギラゴン・ガチャ'}</Typography>
-                                </Hidden>
+                                <NoWrappedTabContent variant='body1'>{'ドギラゴン・ガチャ'}</NoWrappedTabContent>
+                                <WrappedTabContent variant='body2'>{'ドギラゴン・'}</WrappedTabContent>
+                                <WrappedTabContent variant='body2'>{'ガチャ'}</WrappedTabContent>
                             </div>
                         } />
                         <Tab value={GachaKind.Dokindam} label={
                             <div>
-                                <Hidden smUp>
-                                    <Avatar src='/static/DokindamGachaIcon.png' />
-                                </Hidden>
-                                <Hidden xsDown>
-                                    <Typography variant='body1'>{'ドキンダム・ガチャ'}</Typography>
-                                </Hidden>
+                                <NoWrappedTabContent variant='body1'>{'ドキンダム・ガチャ'}</NoWrappedTabContent>
+                                <WrappedTabContent variant='body2'>{'ドキンダム・'}</WrappedTabContent>
+                                <WrappedTabContent variant='body2'>{'ガチャ'}</WrappedTabContent>
                             </div>
                         } />
                     </Tabs>
@@ -196,4 +190,16 @@ const Reeling2 = keyframes`
   100% {
     transform: translate3d(0, calc(-100% + ${A_REEL_HEIGHT * 4}px), 0)
   }
+`
+
+const WrappedTabContent = styled(Typography)`
+    @media screen and (min-width: ${GACHA_TAB_CONTENT_BREAKPOINT}px) {
+        display: none;
+    }
+`
+
+const NoWrappedTabContent = styled(Typography)`
+    @media screen and (max-width: ${GACHA_TAB_CONTENT_BREAKPOINT}px) {
+        display: none;
+    }
 `
