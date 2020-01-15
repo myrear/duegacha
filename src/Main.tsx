@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import styled, { Keyframes, keyframes } from 'styled-components'
 import { Appearance, GachaKind, DogiragonGachaAppearances, DokindamGachaAppearances } from './Gacha'
 import { Paper, IconButton, Grid, Typography, Tab, Tabs } from '@material-ui/core'
-import { Replay } from '@material-ui/icons'
+import { Refresh } from '@material-ui/icons'
 import Detail from './Detail'
 import { A_REEL_HEIGHT, REELING_DURATION, LAST_USED_GACHA_KIND_KEY, STARTUP_GACHA_KIND_KEY, GACHA_TAB_CONTENT_BREAKPOINT } from "./constants";
 import { StartupGachaKind, ChangingGachaBehaviorContext, ChangingGachaBehavior } from "./preference";
@@ -135,7 +135,7 @@ export default () => {
                             </Items>
                         </ViewBox>
                         <IconButton onClick={onPlayReeling}>
-                            <Replay fontSize='large' />
+                            <Refresh fontSize='large' />
                         </IconButton>
                     </ReelBox>
                 </Paper>
