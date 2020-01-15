@@ -1,6 +1,7 @@
 import React from 'react'
 import { List, ListItemAvatar, ListItemText, Card, ListItem, Avatar } from '@material-ui/core'
 import { Log } from './Gacha'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 interface Props {
     logs: Log[]
@@ -15,11 +16,22 @@ const getDateString = (d: Date) => {
     )
 }
 
+const useStyles = makeStyles((theme: Theme) => 
+    createStyles({
+        root: {
+            padding: theme.spacing(2),
+            paddingTop: 0,
+            paddingBottom: 0
+        }
+    })
+)
+
 export default (props: Props) => {
     const { logs } = props
+    const classes = useStyles()
 
     return (
-        <Card>
+        <Card className={classes.root}>
             <List>
                 {logs.map(v => {
                     const { display, timestamp, number } = v
