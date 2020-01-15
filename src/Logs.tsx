@@ -1,10 +1,18 @@
 import React from 'react'
-import { Appearance } from './Gacha'
-import { Grid, Card } from '@material-ui/core'
-import styled from 'styled-components'
+import { List, ListItemAvatar, ListItemText, Card, ListItem, Avatar } from '@material-ui/core'
+import { Log } from './Gacha'
 
 interface Props {
-    logs: Array<Appearance & {timestamp: number}>
+    logs: Log[]
+}
+
+const getDateString = (d: Date) => {
+    return (
+        `${d.getHours().toString().padStart(2, '0')}:` +
+        `${d.getMinutes().toString().padStart(2, '0')}:` +
+        `${d.getSeconds().toString().padStart(2, '0')}.` +
+        `${d.getMilliseconds().toString().padStart(4, '0')}`
+    )
 }
 
 export default (props: Props) => {
@@ -12,23 +20,22 @@ export default (props: Props) => {
 
     return (
         <Card>
-            <ContainerGrid container>
+            <List>
                 {logs.map(v => {
-                    const { display, timestamp } = v
+                    const { display, timestamp, number } = v
                     const date = new Date()
                     date.setTime(timestamp)
 
                     return (
-                        <Grid item xs={12} key={timestamp}>
-                            {display}
-                        </Grid>
+                        <ListItem key={timestamp}>
+                            <ListItemAvatar>
+                                <Avatar>{number}</Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={display} secondary={getDateString(date)} />
+                        </ListItem>
                     )
-                })}
-            </ContainerGrid>
+                }).reverse()}
+            </List>
         </Card>
     )
 }
-
-const ContainerGrid = styled(Grid)`
-    padding: 24px;
-`

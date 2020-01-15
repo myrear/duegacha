@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled, { Keyframes, keyframes } from 'styled-components'
-import { Appearance, GachaKind, DogiragonGachaAppearances, DokindamGachaAppearances } from './Gacha'
+import { Appearance, GachaKind, DogiragonGachaAppearances, DokindamGachaAppearances, Log } from './Gacha'
 import { Paper, IconButton, Grid, Typography, Tab, Tabs } from '@material-ui/core'
 import { Refresh } from '@material-ui/icons'
 import Detail from './Detail'
@@ -8,6 +8,7 @@ import { A_REEL_HEIGHT, REELING_DURATION, LAST_USED_GACHA_KIND_KEY, STARTUP_GACH
 import { StartupGachaKind, ChangingGachaBehaviorContext, ChangingGachaBehavior } from "./preference";
 import './array.extension'
 import './number.exntension'
+import Logs from './Logs'
 
 export default () => {
     const [isReeling, setIsReeling] = useState(false)
@@ -17,7 +18,8 @@ export default () => {
     const [kind, setKind] = useState<GachaKind | undefined>(undefined)
     const [reelingTimeoutId, setReelingTimeoutId] = useState<number | undefined>(undefined)
     const [fadingAnimation, setFadingAnimation] = useState<Keyframes | undefined>(undefined)
-    const [ changingGachaBehavior ] = useContext(ChangingGachaBehaviorContext)
+    const [changingGachaBehavior] = useContext(ChangingGachaBehaviorContext)
+    const [logs, setLogs] = useState<Log[]>([])
 
     // 起動時のガチャ設定
     useEffect(() => {
@@ -64,6 +66,10 @@ export default () => {
             // ガチャアニメーション終了時
             setIsReeling(false)
             setAppearance(newAppearance)
+            setLogs(logs.concat([{
+                ...newAppearance,
+                timestamp: new Date().getTime()
+            }]))
         }, REELING_DURATION))
 
         if (animation === Reeling1) {
@@ -146,6 +152,9 @@ export default () => {
                         <Detail appearance={appearance} />
                     </DetailWrapper>
                 </VerticalFilledPaper>
+            </Grid>
+            <Grid item xs={12}>
+                <Logs logs={logs} />
             </Grid>
         </Grid>
     )

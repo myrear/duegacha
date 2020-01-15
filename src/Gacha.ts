@@ -86,3 +86,8 @@ export const DokindamGachaAppearances: readonly Appearance[] = [
         ability: "進化ではないクリーチャーを1体、自分の墓地からバトルゾーンに出す。"
     }
 ] as const
+
+/**
+ * ガチャのログを表します。
+ */
+export type Log = Appearance & { timestamp: number }
