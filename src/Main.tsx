@@ -15,6 +15,8 @@ export default () => {
     const [appearance, setAppearance] = useState<Appearance | undefined>(undefined)
     const [appearances, setAppearances] = useState(DogiragonGachaAppearances.concat([]).orderFromIndex(DogiragonGachaAppearances.length.randomInteger()))
     const [kind, setKind] = useState<GachaKind | undefined>(undefined)
+    const [reelingTimeoutId, setReelingTimeoutId] = useState<number | undefined>(undefined)
+    const [fadingAnimation, setFadingAnimation] = useState<Keyframes | undefined>(undefined)
     const [ changingGachaBehavior ] = useContext(ChangingGachaBehaviorContext)
 
     // 起動時のガチャ設定
@@ -58,22 +60,38 @@ export default () => {
         setAppearances(newAppearances)
         const newAppearance = newAppearances[appearances.length - 3]
 
-        window.setTimeout(() => {
+        setReelingTimeoutId(window.setTimeout(() => {
+            // ガチャアニメーション終了時
             setIsReeling(false)
             setAppearance(newAppearance)
-        }, REELING_DURATION)
+        }, REELING_DURATION))
 
         if (animation === Reeling1) {
             setAnimation(Reeling2)
+            setFadingAnimation(FadeOut2)
         } else {
             setAnimation(Reeling1)
+            setFadingAnimation(FadeOut1)
         }
     }
 
     // ガチャの種類を切り替える直前
     const onChangeGachaKind = (e: React.ChangeEvent<{}>, k: GachaKind) => {
-        if (isReeling && changingGachaBehavior === ChangingGachaBehavior.DoNotChange) return;
-        setKind(k)
+        if (isReeling === false) {
+            setKind(k)
+            return;
+        }
+
+        switch (changingGachaBehavior) {
+            case ChangingGachaBehavior.DoNotChange:
+                // 切り替えない
+                return
+            case ChangingGachaBehavior.StopReelingAndForceChanging:
+                window.clearTimeout(reelingTimeoutId)
+                setKind(k)
+                setIsReeling(false)
+                break
+        }
     }
 
     return (
@@ -124,7 +142,7 @@ export default () => {
             </Grid>
             <Grid item xs={12} sm>
                 <VerticalFilledPaper>
-                    <DetailWrapper>
+                    <DetailWrapper fadeAnimation={fadingAnimation}>
                         <Detail appearance={appearance} />
                     </DetailWrapper>
                 </VerticalFilledPaper>
@@ -147,8 +165,13 @@ const VerticalFilledPaper = styled(Paper)`
     min-height: 150px;
 `
 
-const DetailWrapper = styled.div`
+const DetailWrapper = styled.div<{ fadeAnimation?: Keyframes }>`
     padding: 16px;
+    animation-name: ${props => props.fadeAnimation};
+    animation-duration: ${REELING_DURATION}ms;
+    animation-iteration-count: 1;
+    animation-fill-mode: backwards;
+    animation-timing-function: ease-out;
 `
 
 const ReelBox = styled.div`
@@ -190,6 +213,24 @@ const Reeling2 = keyframes`
   100% {
     transform: translate3d(0, calc(-100% + ${A_REEL_HEIGHT * 4}px), 0)
   }
+`
+
+const FadeOut1 = keyframes`
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+`
+
+const FadeOut2 = keyframes`
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 `
 
 const WrappedTabContent = styled(Typography)`
