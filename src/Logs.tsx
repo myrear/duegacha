@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             padding: theme.spacing(2),
             paddingTop: 0,
-            paddingBottom: 0
+            paddingBottom: 0,
+            maxHeight: '50vh',
+            overflow: 'scroll'
         }
     })
 )
