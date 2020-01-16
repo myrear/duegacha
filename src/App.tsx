@@ -58,7 +58,7 @@ const Root = styled.div`
   height: 100vh;
   background-color: rgba(200, 200, 200, 0.1);
   user-select: none;
-  overflow: scroll;
+  overflow-y: scroll;
 `
 
 const MainWrapper = styled.div`

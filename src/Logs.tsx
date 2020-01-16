@@ -19,11 +19,8 @@ const getDateString = (d: Date) => {
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
-            padding: theme.spacing(2),
-            paddingTop: 0,
-            paddingBottom: 0,
             maxHeight: '50vh',
-            overflow: 'scroll'
+            overflowY: 'scroll'
         }
     })
 )
