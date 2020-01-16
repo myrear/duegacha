@@ -100,6 +100,10 @@ export default () => {
         }
     }
 
+    const clearHistory = () => {
+        setLogs([])
+    }
+
     return (
         <Grid container spacing={2} alignItems={'stretch'} justify={'center'}>
             <Grid item xs={12}>
@@ -154,7 +158,7 @@ export default () => {
                 </VerticalFilledPaper>
             </Grid>
             <Grid item xs={12}>
-                <Logs logs={logs} />
+                <Logs logs={logs} clearHistory={clearHistory} />
             </Grid>
         </Grid>
     )
