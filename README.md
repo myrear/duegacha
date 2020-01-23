@@ -7,6 +7,10 @@ https://duegacha-simulator.netlify.com/
 ## About
 
 デュエル・マスターズで使用される、[デュエガチャ](https://dm.takaratomy.co.jp/archive/rule/qa/dmd34-0001/) のシミュレータです。
+PWAに対応しているため、ホーム画面に追加するとネイティブアプリのように動作します。
+
+
+
 実際のデュエガチャ本体やサイコロを利用する場合と比べ、以下のような利点があります。
 
 - 一つの画面で完結する
